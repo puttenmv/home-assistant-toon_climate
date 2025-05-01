@@ -89,7 +89,7 @@ Supported hvac modes:
                 configured as one of the supported hvac modes this mode
                 can be used to activate the vacation mode
 """
-SUPPORT_MODES = [HVACMode.HEAT, HVACMode.AUTO]
+SUPPORT_MODES = [HVACMode.HEAT, HVACMode.AUTO, HVACMode.OFF]
 
 DEFAULT_NAME = "Toon Thermostat"
 BASE_URL = "http://{0}:{1}{2}"
@@ -315,8 +315,11 @@ class ThermostatDevice(ClimateEntity):
         - 2: Burner is on (heating for generating warm water)
         - 3: Burner is on (preheating for next setpoint)
         """
-        if (self._burner_info == 1) or (self._burner_info == 3):
+        if (self._burner_info == 1):
             return HVACAction.HEATING
+
+        if (self._burner_info == 3):
+            return HVACAction.PREHEATING
 
         return HVACAction.IDLE
 
